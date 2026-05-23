@@ -36,11 +36,19 @@ app.get('/organizations', (req, res) => {
   });
 });
 
-app.get('/projects', (req, res) => {
-  res.render('projects', {
-    title: 'Projects',
-    year: new Date().getFullYear()
-  });
+app.get('/projects', async (req, res) => {
+  try {
+    const projects = await getAllProjects();
+
+    res.render('projects', {
+      title: 'Projects',
+      projects,
+      year: new Date().getFullYear()
+    });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    res.status(500).send('Server error');
+  }
 });
 
 app.get('/categories', async (req, res) => {
@@ -59,7 +67,7 @@ app.listen(PORT, async () => {
   try {
     await testConnection();
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
-    console.log(`Environment: ${NODE_ENV}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   } catch (error) {
     console.error('Error connecting to the database:', error);
   }
