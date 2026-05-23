@@ -1,37 +1,106 @@
 -- ========================================
--- Organization Table
+-- Service Project Table
 -- ========================================
-CREATE TABLE organization (
-    organization_id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
+
+CREATE TABLE service_project (
+    project_id SERIAL PRIMARY KEY,
+    organization_id INTEGER NOT NULL,
+    title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    contact_email VARCHAR(255) NOT NULL,
-    logo_filename VARCHAR(255) NOT NULL
+    location VARCHAR(255) NOT NULL,
+    project_date DATE NOT NULL,
+
+    CONSTRAINT fk_service_project_organization
+        FOREIGN KEY (organization_id)
+        REFERENCES organization(organization_id)
 );
+
 -- ========================================
--- Insert Organization Data
+-- Insert Service Project Data
+-- 5 projects for each organization
 -- ========================================
-INSERT INTO organization (
-        name,
-        description,
-        contact_email,
-        logo_filename
-    )
-VALUES (
-        'BrightFuture Builders',
-        'A nonprofit focused on improving community infrastructure through sustainable construction projects.',
-        'info@brightfuturebuilders.org',
-        'brightfuture-logo.png'
-    ),
-    (
-        'GreenHarvest Growers',
-        'An urban farming collective promoting food sustainability and education in local neighborhoods.',
-        'contact@greenharvest.org',
-        'greenharvest-logo.png'
-    ),
-    (
-        'UnityServe Volunteers',
-        'A volunteer coordination group supporting local charities and service initiatives.',
-        'hello@unityserve.org',
-        'unityserve-logo.png'
-    );
+
+INSERT INTO service_project (
+    organization_id,
+    title,
+    description,
+    location,
+    project_date
+)
+
+VALUES
+
+-- BrightFuture Builders projects
+(1, 'Park Cleanup', 'Clean local parks and walking trails.', 'Provo, UT', '2026-06-01'),
+(1, 'Tree Planting', 'Plant new trees in community areas.', 'Orem, UT', '2026-06-05'),
+(1, 'Neighborhood Repair Day', 'Help repair and improve community spaces.', 'Salt Lake City, UT', '2026-06-10'),
+(1, 'Community Garden Build', 'Build raised garden beds for residents.', 'Lehi, UT', '2026-06-15'),
+(1, 'Playground Improvement', 'Paint and repair playground equipment.', 'Spanish Fork, UT', '2026-06-20'),
+
+-- GreenHarvest Growers projects
+(2, 'Food Drive', 'Collect food donations for local families.', 'Provo, UT', '2026-07-01'),
+(2, 'Urban Farming Workshop', 'Teach families how to grow food at home.', 'Orem, UT', '2026-07-05'),
+(2, 'Farmers Market Support', 'Help organize a community farmers market.', 'Lehi, UT', '2026-07-10'),
+(2, 'School Garden Help', 'Support garden projects at local schools.', 'Salt Lake City, UT', '2026-07-15'),
+(2, 'Fresh Produce Delivery', 'Deliver fresh produce to families in need.', 'Spanish Fork, UT', '2026-07-20'),
+
+-- UnityServe Volunteers projects
+(3, 'Community Tutoring', 'Tutor students in different school subjects.', 'Provo, UT', '2026-08-01'),
+(3, 'Charity Supply Sorting', 'Sort donated supplies for local charities.', 'Orem, UT', '2026-08-05'),
+(3, 'Senior Center Visit', 'Visit and help at a senior center.', 'Lehi, UT', '2026-08-10'),
+(3, 'Volunteer Training Night', 'Train new volunteers for service events.', 'Salt Lake City, UT', '2026-08-15'),
+(3, 'Backpack Donation Event', 'Prepare backpacks and supplies for students.', 'Spanish Fork, UT', '2026-08-20');
+
+-- ========================================
+-- Category Table
+-- ========================================
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+INSERT INTO category (name)
+VALUES
+('Environmental'),
+('Educational'),
+('Community Service'),
+('Health and Wellness');
+
+-- ========================================
+-- Project Category Junction Table
+-- ========================================
+
+CREATE TABLE project_category (
+    project_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    CONSTRAINT fk_project_category_project
+        FOREIGN KEY (project_id)
+        REFERENCES service_project(project_id),
+
+    CONSTRAINT fk_project_category_category
+        FOREIGN KEY (category_id)
+        REFERENCES category(category_id)
+);
+
+-- Associate each project with at least one category
+INSERT INTO project_category (project_id, category_id)
+VALUES
+(1, 1),
+(2, 1),
+(3, 3),
+(4, 1),
+(5, 3),
+(6, 3),
+(7, 2),
+(8, 3),
+(9, 2),
+(10, 4),
+(11, 2),
+(12, 3),
+(13, 4),
+(14, 3),
+(15, 2);

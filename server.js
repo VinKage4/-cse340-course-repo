@@ -4,10 +4,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getAllProjects }
   from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import { getAllCategories }
+  from './src/models/categories.js';
 import { testConnection }
   from './src/models/db.js';
-
+import { getAllOrganizations }
+  from './src/models/organizations.js';
 dotenv.config();
 
 const app = express();
@@ -29,11 +31,19 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/organizations', (req, res) => {
-  res.render('organizations', {
-    title: 'Organizations',
-    year: new Date().getFullYear()
-  });
+app.get('/organizations', async (req, res) => {
+
+    const organizations =
+        await getAllOrganizations();
+
+    const title =
+        'Our Partner Organizations';
+
+    res.render('organizations', {
+        title,
+        organizations,
+        year: new Date().getFullYear()
+    });
 });
 
 app.get('/projects', async (req, res) => {
@@ -54,10 +64,8 @@ app.get('/projects', async (req, res) => {
 app.get('/categories', async (req, res) => {
     const categories = await getAllCategories();
 
-    const title = 'Service Project Categories';
-
     res.render('categories', {
-        title,
+        title: 'Service Project Categories',
         categories,
         year: new Date().getFullYear()
     });

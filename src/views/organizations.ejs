@@ -1,11 +1,43 @@
 <%- include('partials/header') %>
 
-<h2>Partner Organizations</h2>
+<h1><%= title %></h1>
+
+<p>
+  Here are a few of our partner organizations:
+</p>
 
 <ul>
-  <li>BrightFuture Builders</li>
-  <li>GreenHarvest Growers</li>
-  <li>UnityServe Volunteers</li>
+
+<% organizations.forEach(organization => { %>
+
+  <li>
+
+    <img
+      src="/images/<%= organization.logo_filename %>"
+      alt="<%= organization.name %> logo"
+      width="150"
+    >
+
+    <br>
+
+    <strong>
+      <%= organization.name %>
+    </strong>
+
+    <br>
+
+    <%= organization.description %>
+
+    <br>
+
+    <%= organization.contact_email %>
+
+    <br><br>
+
+  </li>
+
+<% }); %>
+
 </ul>
 
 <%- include('partials/footer') %>
