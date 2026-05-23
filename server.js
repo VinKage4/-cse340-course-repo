@@ -2,6 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getAllProjects }
+  from './src/models/projects.js';
+import { getAllCategories } from './src/models/categories.js';
 
 dotenv.config();
 
@@ -38,11 +41,16 @@ app.get('/projects', (req, res) => {
   });
 });
 
-app.get('/categories', (req, res) => {
-  res.render('categories', {
-    title: 'Categories',
-    year: new Date().getFullYear()
-  });
+app.get('/categories', async (req, res) => {
+    const categories = await getAllCategories();
+
+    const title = 'Service Project Categories';
+
+    res.render('categories', {
+        title,
+        categories,
+        year: new Date().getFullYear()
+    });
 });
 
 app.listen(PORT, () => {
