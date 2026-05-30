@@ -1,11 +1,35 @@
 <%- include('partials/header') %>
 
-<h2>Partner Organizations</h2>
+<main>
+    <h1><%= title %></h1>
 
-<ul>
-  <li>BrightFuture Builders</li>
-  <li>GreenHarvest Growers</li>
-  <li>UnityServe Volunteers</li>
-</ul>
+    <h2>
+        <a href="/organization/<%= organization.organization_id %>">
+    <%= organization.name %>
+</a>
+    </h2>
+
+    <img
+        src="/images/<%= organizationDetails.logo_filename %>"
+        alt="<%= organizationDetails.name %> logo"
+    >
+
+    <p>
+        Description:
+        <%= organizationDetails.description %>
+    </p>
+
+    <h3>Service Projects</h3>
+
+    <ul>
+        <% projects.forEach(project => { %>
+            <li>
+                <a href="/project/<%= project.project_id %>">
+                    <%= project.title %>
+                </a>
+            </li>
+        <% }) %>
+    </ul>
+</main>
 
 <%- include('partials/footer') %>
